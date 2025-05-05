@@ -4,10 +4,15 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { contentRoute } from "./routes/index.js";
 import { connectToDb } from "./db/index.js";
+import { auth } from "./utils/auth.js";
 
 const app = new OpenAPIHono();
 
 contentRoute(app);
+
+app.on(["POST", "GET"], "/api/auth/*", (c) => {
+  return auth.handler(c.req.raw);
+});
 
 app.doc("/doc", {
   openapi: "3.0.0",

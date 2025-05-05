@@ -1,6 +1,7 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { analyseString, getSuccessSchema } from "../utils/index.js";
 import { KittenModel } from "../models/user.js";
+import { authMiddleware } from "../middlewares/index.js";
 
 const responseSchema = z.object({
   score: z.number().openapi({
@@ -30,6 +31,7 @@ const postDataRouteConfig = createRoute({
       },
     },
   },
+  middlewares: [authMiddleware] as const,
   responses: {
     200: {
       description: "OK",
@@ -70,6 +72,7 @@ const postDataRouteConfig = createRoute({
 });
 
 export const contentRoute = (app: OpenAPIHono) => {
+  app.use(postDataRouteConfig.getRoutingPath(), authMiddleware);
   app.openapi(postDataRouteConfig, async (c) => {
     try {
       const body = c.req.valid("json");
