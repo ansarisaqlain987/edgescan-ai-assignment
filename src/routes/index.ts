@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { analyseString, getSuccessSchema } from "../utils/index.js";
+import { KittenModel } from "../models/user.js";
 
 const responseSchema = z.object({
   score: z.number().openapi({
@@ -69,16 +70,29 @@ const postDataRouteConfig = createRoute({
 });
 
 export const contentRoute = (app: OpenAPIHono) => {
-  app.openapi(postDataRouteConfig, (c) => {
-    const body = c.req.valid("json");
-    const x = analyseString(body.text);
-    return c.json(
-      {
-        success: true,
-        data: x,
-      },
-      200
-    );
+  app.openapi(postDataRouteConfig, async (c) => {
+    try {
+      const body = c.req.valid("json");
+      const x = analyseString(body.text);
+      const data = await KittenModel.find();
+      console.log(data);
+      return c.json(
+        {
+          success: true,
+          data: x,
+        },
+        200
+      );
+    } catch (e) {
+      console.log(e);
+      return c.json(
+        {
+          success: false,
+          error: e,
+        },
+        400
+      );
+    }
   });
 
   return app;

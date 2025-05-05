@@ -3,6 +3,7 @@ import { swaggerUI } from "@hono/swagger-ui";
 
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { contentRoute } from "./routes/index.js";
+import { connectToDb } from "./db/index.js";
 
 const app = new OpenAPIHono();
 
@@ -18,12 +19,20 @@ app.doc("/doc", {
 
 app.get("/ui", swaggerUI({ url: "/doc" }));
 
-serve(
-  {
-    fetch: app.fetch,
-    port: 3000,
-  },
-  (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
-  }
-);
+connectToDb()
+  .then(() => {
+    serve(
+      {
+        fetch: app.fetch,
+        port: 3001,
+      },
+      (info) => {
+        console.log(`Server is running on http://localhost:${info.port}`);
+      }
+    );
+  })
+  .catch((err) => {
+    console.log(err);
+    console.log("\n\n\nError connecting to database");
+    return process.exit(0);
+  });

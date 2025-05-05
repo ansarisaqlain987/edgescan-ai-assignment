@@ -2,7 +2,7 @@
   "name": "edgescan-ai-assignment",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "dotenv -- tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -10,8 +10,12 @@
     "@hono/node-server": "^1.14.1",
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.6",
+    "@typegoose/typegoose": "^12.15.0",
     "@types/sentiment": "^5.0.4",
+    "better-auth": "^1.2.7",
+    "dotenv-cli": "^8.0.0",
     "hono": "^4.7.8",
+    "mongoose": "^8.14.1",
     "sentiment": "^5.0.2"
   },
   "devDependencies": {
