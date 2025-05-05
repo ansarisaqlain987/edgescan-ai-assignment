@@ -10,7 +10,9 @@
     "@hono/node-server": "^1.14.1",
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.6",
-    "hono": "^4.7.8"
+    "@types/sentiment": "^5.0.4",
+    "hono": "^4.7.8",
+    "sentiment": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

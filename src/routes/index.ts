@@ -1,5 +1,19 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { getSuccessSchema } from "../utils/index.js";
+import { analyseString, getSuccessSchema } from "../utils/index.js";
+
+const responseSchema = z.object({
+  score: z.number().openapi({
+    example: 23,
+  }),
+  comparative: z.number().openapi({
+    example: 23,
+  }),
+  calculation: z.array(z.record(z.string(), z.number())),
+  tokens: z.array(z.string()),
+  words: z.array(z.string()),
+  positive: z.array(z.string()),
+  negative: z.array(z.string()),
+});
 
 const postDataRouteConfig = createRoute({
   method: "post",
@@ -20,16 +34,10 @@ const postDataRouteConfig = createRoute({
       description: "OK",
       content: {
         "application/json": {
-          schema: getSuccessSchema(
-            z.object({
-              label: z.string().openapi({
-                example: "Good",
-              }),
-              confidence: z.number().openapi({
-                example: 23,
-              }),
-            })
-          ),
+          schema: z.object({
+            success: z.boolean().openapi({ default: true }),
+            data: responseSchema,
+          }),
         },
       },
     },
@@ -63,15 +71,11 @@ const postDataRouteConfig = createRoute({
 export const contentRoute = (app: OpenAPIHono) => {
   app.openapi(postDataRouteConfig, (c) => {
     const body = c.req.valid("json");
-    console.log(body);
+    const x = analyseString(body.text);
     return c.json(
       {
         success: true,
-        data: {
-          label: "Hello",
-          confidence: 20,
-          name: "Ultra-man 123",
-        },
+        data: x,
       },
       200
     );
