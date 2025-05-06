@@ -1,6 +1,9 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { analyseString } from "../utils/index.js";
-import { authMiddleware } from "../middlewares/index.js";
+import {
+  authMiddleware,
+  rateLimitterMiddleware,
+} from "../middlewares/index.js";
 import { ContentModel } from "../models/content.js";
 import { createContentRouteConfig, getContentRouteConfig } from "./openapi.js";
 
@@ -11,7 +14,11 @@ type User = {
 };
 
 export const contentRoute = (app: OpenAPIHono) => {
-  app.use(createContentRouteConfig.getRoutingPath(), authMiddleware);
+  app.use(
+    createContentRouteConfig.getRoutingPath(),
+    authMiddleware,
+    rateLimitterMiddleware
+  );
   app.openapi(createContentRouteConfig, async (c) => {
     try {
       const body = c.req.valid("json");
@@ -42,7 +49,11 @@ export const contentRoute = (app: OpenAPIHono) => {
     }
   });
 
-  app.use(getContentRouteConfig.getRoutingPath(), authMiddleware);
+  app.use(
+    getContentRouteConfig.getRoutingPath(),
+    authMiddleware,
+    rateLimitterMiddleware
+  );
   app.openapi(getContentRouteConfig, async (c) => {
     try {
       const user: User = c.get("user" as never);

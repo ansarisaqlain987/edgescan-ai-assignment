@@ -8,8 +8,13 @@ import { csrf } from "hono/csrf";
 import { logger } from "hono/logger";
 import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
+import { prometheus } from "@hono/prometheus";
 
 const app = new OpenAPIHono();
+
+const { printMetrics, registerMetrics } = prometheus({
+  collectDefaultMetrics: true,
+});
 
 app.use(secureHeaders());
 app.use("*", requestId());
@@ -19,6 +24,9 @@ app.use(
   })
 );
 app.use(logger());
+
+app.use("*", registerMetrics);
+app.get("/metrics", printMetrics);
 
 authRoute(app);
 contentRoute(app);
