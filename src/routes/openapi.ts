@@ -6,6 +6,7 @@ import {
   requestBodySchema,
   successSchema,
   unauthorisedErrorSchema,
+  unprocessableEntityErrorSchema,
 } from "./index.js";
 
 export const createContentSchema = z.object({
@@ -92,6 +93,27 @@ export const loginRouteConfig = createRoute({
       })
     ),
     400: badRequestErrorSchema,
+    401: unauthorisedErrorSchema,
+    500: internalServerErrorSchema,
+  },
+});
+
+export const signupSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+  name: z.string(),
+});
+
+export const signupRouteConfig = createRoute({
+  method: "post",
+  path: "/api/auth/sign-up/email",
+  request: {
+    body: requestBodySchema(signupSchema),
+  },
+  responses: {
+    200: successSchema(z.object({ token: z.string() })),
+    400: badRequestErrorSchema,
+    422: unprocessableEntityErrorSchema,
     500: internalServerErrorSchema,
   },
 });

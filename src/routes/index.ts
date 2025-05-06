@@ -49,6 +49,20 @@ export const badRequestErrorSchema = {
   },
 };
 
+export const unprocessableEntityErrorSchema = {
+  description: "Unprocessable Entity",
+  content: {
+    "application/json": {
+      schema: z.object({
+        success: z.boolean().openapi({
+          default: false,
+        }),
+        error: z.string().openapi({ default: "Unprocessable Entity" }),
+      }),
+    },
+  },
+};
+
 export const successSchema = (schema: z.ZodSchema) => {
   return {
     description: "OK",
