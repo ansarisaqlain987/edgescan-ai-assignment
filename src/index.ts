@@ -4,8 +4,21 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { contentRoute } from "./routes/content.js";
 import { connectToDb } from "./db/index.js";
 import { authRoute } from "./routes/auth.js";
+import { csrf } from "hono/csrf";
+import { logger } from "hono/logger";
+import { requestId } from "hono/request-id";
+import { secureHeaders } from "hono/secure-headers";
 
 const app = new OpenAPIHono();
+
+app.use(secureHeaders());
+app.use("*", requestId());
+app.use(
+  csrf({
+    origin: ["myapp.example.com", "development.myapp.example.com"],
+  })
+);
+app.use(logger());
 
 authRoute(app);
 contentRoute(app);
