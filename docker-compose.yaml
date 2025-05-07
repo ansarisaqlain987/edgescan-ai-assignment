@@ -9,6 +9,10 @@ services:
       - "3000:3000"
     depends_on:
       - mongodb
+    environment:
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - DB_URL=mongodb://test:test@host.docker.internal:27017/content?authSource=admin
 
   mongodb:
     image: mongo:latest
@@ -17,3 +21,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: test
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
