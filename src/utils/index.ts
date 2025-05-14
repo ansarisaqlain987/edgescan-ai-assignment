@@ -21,7 +21,7 @@ export const getDatabaseString = () => {
   const DB_HOST = process.env.DB_HOST;
 
   if (isProduction) {
-    return `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?authSource=admin`;
+    return `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
   }
 
   return `mongodb://${DB_USER}:${DB_PASS}@host.docker.internal:27017/${DB_NAME}?authSource=admin`;
