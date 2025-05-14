@@ -1,8 +1,8 @@
 FROM node:22-alpine AS base
+RUN apk add --no-cache gcompat ca-certificates
 
 FROM base AS builder
 
-RUN apk add --no-cache gcompat
 WORKDIR /app
 
 COPY package*json tsconfig.json src ./
