@@ -1,5 +1,6 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 
+@modelOptions({ options: { allowMixed: 0 } })
 class ContentClass {
   @prop({ type: String })
   public userId?: string;
