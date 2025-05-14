@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+import { getDatabaseString } from "../utils/index.js";
 
 export const connectToDb = async () => {
-  console.log("DB", process.env.DB_URL);
-  return mongoose.connect(process.env.DB_URL || "", {
+  const DB_URL = getDatabaseString();
+  console.log("DB", DB_URL);
+  return mongoose.connect(DB_URL || "", {
     ssl: false,
   });
 };

@@ -2,8 +2,10 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
 import { bearer } from "better-auth/plugins";
+import { getDatabaseString } from "./index.js";
 
-const client = new MongoClient(process.env.DB_URL || "");
+const DB_URL = getDatabaseString();
+const client = new MongoClient(DB_URL || "");
 const db = client.db();
 
 export const auth = betterAuth({
