@@ -29,7 +29,7 @@ export const createContentRouteConfig = createRoute({
   request: {
     body: requestBodySchema(z.object({ text: z.string() })),
     headers: z.object({
-      authorization: z.string().openapi({ default: "Bearer <token>" }),
+      Authorization: z.string().openapi({ default: "<token>" }),
     }),
   },
   middlewares: [authMiddleware] as const,
@@ -54,7 +54,7 @@ export const getContentRouteConfig = createRoute({
   path: "/api/content",
   request: {
     headers: z.object({
-      authorization: z.string().openapi({ default: "Bearer <token>" }),
+      Authorization: z.string().openapi({ default: "<token>" }),
     }),
   },
   responses: {
