@@ -26,6 +26,7 @@ export const createContentSchema = z.object({
 export const createContentRouteConfig = createRoute({
   method: "post",
   path: "/api/content",
+  description: "For Sentiment Analysis",
   request: {
     body: requestBodySchema(z.object({ text: z.string() })),
     headers: z.object({
@@ -52,6 +53,7 @@ export const getContentsSchema = z.object({
 export const getContentRouteConfig = createRoute({
   method: "get",
   path: "/api/content",
+  description: "For retreiving stored analysed sentiments",
   request: {
     headers: z.object({
       Authorization: z.string().openapi({ default: "<token>" }),
